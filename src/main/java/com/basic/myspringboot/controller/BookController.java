@@ -5,6 +5,7 @@ import com.basic.myspringboot.entity.User;
 import com.basic.myspringboot.exception.BusinessException;
 import com.basic.myspringboot.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @RequestMapping("/api/books")
 public class BookController {
+    @Autowired
     private BookRepository bookRepository;
 
     @PostMapping
@@ -40,14 +42,14 @@ public class BookController {
         return responseEntity;
     }
 
-    @GetMapping("/isbn/{isbn}/")  //http://localhost:8080/api/users/id/100
+    @GetMapping("/isbn/{isbn}")  //http://localhost:8080/api/users/id/100
     public Book getBooksByIsbn(@PathVariable String isbn){
         Optional<Book> optionalBook = bookRepository.findByIsbn(isbn);
         Book existBook = getExistBook(optionalBook);
         return existBook;
     }
 
-    @GetMapping("/author/{author}/")  //http://localhost:8080/api/users/id/100
+    @GetMapping("/author/{author}")  //http://localhost:8080/api/users/id/100
     public Book getBooksByAuthor(@PathVariable String author){
         Optional<Book> optionalBook = bookRepository.findByIsbn(author);
         Book existBook = getExistBook(optionalBook);
@@ -65,9 +67,13 @@ public class BookController {
         Book existBook = getExistBook(bookRepository.findById(id));
         existBook.setTitle(updatedBook.getTitle());
         existBook.setAuthor(updatedBook.getAuthor());
+        existBook.setIsbn(updatedBook.getIsbn());
+        existBook.setPrice(updatedBook.getPrice());
+        existBook.setPublishDate(updatedBook.getPublishDate());
         Book savedBook = bookRepository.save(existBook);
         return ResponseEntity.ok(savedBook);
     }
+
 
 
 

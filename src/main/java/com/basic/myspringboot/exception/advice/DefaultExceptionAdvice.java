@@ -53,6 +53,8 @@ public class DefaultExceptionAdvice {
         result.put("message", e.getMessage());
         result.put("httpStatus", HttpStatus.BAD_REQUEST.value());
 
+        log.error(e.getMessage(), e);
+
         return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
     }
 
